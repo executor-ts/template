@@ -25,12 +25,17 @@ npm run deploy           # Full pipeline: build → rojo → bundle
 ```
 
 ## Available scripts
-- `build` — Compile TypeScript to Roblox XML/metadata
-- `watch` — Watch mode with automatic recompilation
-- `rojo` — Export Rojo build to `dist/build.rbxm`
-- `bundle:dev` / `bundle:prod` — Bundle to Luau for Executor (dev/prod)
-- `bundle` — Run both dev and prod bundles
-- `deploy` — Full pipeline: build → rojo → bundle
+- `build` — Compile TypeScript with `rbxtsc` (produces compiled output used by Rojo)
+- `watch` — Run `rbxtsc` in watch mode for development
+- `rojo` — Ensure `dist/` exists and run `rojo build -o dist/build.rbxm`
+- `bundle` — Run `rbxts-bundler` to produce Executor Luau bundles into `dist/scripts` (all targets included)
+- `deploy` — Full pipeline: `build` → `rojo` → `bundle`
+
+### Bundle targets
+
+- `dev` — line data and debugging preserved.
+- `rel` — optimized for size/performance; more difficult to debug.
+- `*-compat` (e.g. `dev-compat`, `rel-compat`) — produce bundles compatible with earlier Luau versions, aiming to be as close to Lua 5.1 compatibility as possible.
 
 ## Project layout
 
@@ -39,10 +44,9 @@ npm run deploy           # Full pipeline: build → rojo → bundle
 - [src/](src/) — TypeScript source code
   - [index.client.ts](src/index.client.ts) — Entry point
   - [libs/module.ts](src/libs/module.ts) — Example module
-- `dist/` — Generated output (created by build scripts)
-  - `build.rbxm` — Rojo-compiled model file
-  - `development.luau` — Development bundle (unminified)
-  - `production.luau` — Production bundle (minified)
+ - `dist/` — Generated output (created by build scripts)
+  - `build.rbxm` — Rojo-compiled model file (created by the `rojo` script)
+  - `scripts/` — Luau bundles produced by `rbxts-bundler`. Expect multiple targets such as `dev`, `dev-compat`, `rel`, and `rel-compat` (filenames depend on bundler configuration)
 - [package.json](package.json) — Dependencies and scripts
 
 ## Contributing

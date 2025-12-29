@@ -6,10 +6,8 @@
     "build": "rbxtsc",
     "watch": "rbxtsc -w",
     "rojo": "node -e \"require('fs').mkdirSync('dist', {recursive: true})\" && rojo build -o dist/build.rbxm",
-    "bundle:dev": "rbxts-bundler -i dist/build.rbxm -o dist/development.luau",
-    "bundle:prod": "rbxts-bundler -i dist/build.rbxm -o dist/production.luau -r",
-    "bundle": "npm run bundle:dev -s && npm run bundle:prod -s",
-    "deploy": "npm run build -s && npm run rojo -s && npm run bundle -s"
+    "bundle": "rbxts-bundler build dist/build.rbxm -o dist/scripts -t dev -t dev-compat -t rel -t rel-compat",
+    "deploy": "rbxtsc && npm run rojo -s && npm run bundle -s"
   },
   "keywords": [],
   "author": "terminalvibes",
